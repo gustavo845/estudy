@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Compras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .produtos {
+            width: 70%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .produto {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .produto button {
+            margin-top: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+
+        .produto button:hover {
+            background-color: #218838;
+        }
+
+        .carrinho-overlay {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .carrinho {
+            width: 100%;
+            max-width: 300px;
+            height: 100%;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-left: 2px solid #ccc;
+            position: relative;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .carrinho h2 {
+            margin-top: 0;
+        }
+
+        .carrinho ul {
+            list-style-type: none;
+            padding: 0;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .carrinho li {
+            margin-bottom: 10px;
+            padding: 8px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .carrinho li input {
+            width: 50px;
+            margin-right: 10px;
+            text-align: center;
+        }
+
+        .carrinho li button {
+            padding: 5px;
+            background-color: #dc3545;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .finalizar-button {
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: not-allowed;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+        }
+
+        .modal img {
+            max-width: 100px;
+            max-height: 100px;
+        }
+
+        .modal-content {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .modal button {
+            padding: 10px;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .modal button:hover {
+            background-color: #218838;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .modal h4 {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="produtos">
+        <div class="produto">
+            <h3>Produto 1</h3>
+            <img src="https://via.placeholder.com/100" alt="Produto 1">
+            <p>R$ 20,00</p>
+            <button onclick="abrirModal('Produto 1', 'https://via.placeholder.com/100', 20)">Selecionar</button>
+        </div>
+        <div class="produto">
+            <h3>Produto 2</h3>
+            <img src="https://via.placeholder.com/100" alt="Produto 2">
+            <p>R$ 30,00</p>
+            <button onclick="abrirModal('Produto 2', 'https://via.placeholder.com/100', 30)">Selecionar</button>
+        </div>
+        <div class="produto">
+            <h3>Produto 3</h3>
+            <img src="https://via.placeholder.com/100" alt="Produto 3">
+            <p>R$ 40,00</p>
+            <button onclick="abrirModal('Produto 3', 'https://via.placeholder.com/100', 40)">Selecionar</button>
+        </div>
+        <div class="produto">
+            <h3>Produto 4</h3>
+            <img src="https://via.placeholder.com/100" alt="Produto 4">
+            <p>R$ 25,00</p>
+            <button onclick="abrirModal('Produto 4', 'https://via.placeholder.com/100', 25)">Selecionar</button>
+        </div>
+        <div class="produto">
+            <h3>Produto 5</h3>
+            <img src="https://via.placeholder.com/100" alt="Produto 5">
+            <p>R$ 50,00</p>
+            <button onclick="abrirModal('Produto 5', 'https://via.placeholder.com/100', 50)">Selecionar</button>
+        </div>
+        <div class="produto">
+            <h3>Produto 6</h3>
+            <img src="https://via.placeholder.com/100" alt="Produto 6">
+            <p>R$ 60,00</p>
+            <button onclick="abrirModal('Produto 6', 'https://via.placeholder.com/100', 60)">Selecionar</button>
+        </div>
+        <div class="produto">
+            <h3>Produto 7</h3>
+            <img src="https://via.placeholder.com/100" alt="Produto 7">
+            <p>R$ 70,00</p>
+            <button onclick="abrirModal('Produto 7', 'https://via.placeholder.com/100', 70)">Selecionar</button>
+        </div>
+        <div class="produto">
+            <h3>Produto 8</h3>
+            <img src="https://via.placeholder.com/100" alt="Produto 8">
+            <p>R$ 80,00</p>
+            <button onclick="abrirModal('Produto 8', 'https://via.placeholder.com/100', 80)">Selecionar</button>
+        </div>
+    </div>
+
+    <div class="carrinho-overlay" id="carrinhoOverlay">
+        <div class="carrinho" id="carrinho">
+            <button class="close-button" onclick="fecharCarrinho()">×</button>
+            <h2>Seu Carrinho</h2>
+            <ul id="listaCarrinho">
+                <!-- Itens do carrinho aparecerão aqui -->
+            </ul>
+            <div class="totais">
+                <div>
+                    <span>Total:</span>
+                    <span id="total">R$ 0,00</span>
+                </div>
+            </div>
+            <button class="finalizar-button">Finalizar</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modal">
+            <button class="modal-close" onclick="fecharModal()">×</button>
+            <div class="modal-content">
+                <img id="modalImage" src="" alt="Produto">
+                <div>
+                    <h4 id="modalTitle">Produto</h4>
+                    <p id="modalPrice">R$ 0,00</p>
+                    <input type="number" id="quantidade" min="1" value="1" onchange="atualizarPrecoModal()">
+                </div>
+            </div>
+            <button onclick="adicionarAoCarrinho()">Adicionar ao Carrinho</button>
+        </div>
+    </div>
+
+    <script>
+        let produtoSelecionado = '';
+        let precoProduto = 0;
+
+        function abrirModal(produto, imagem, preco) {
+            produtoSelecionado = produto;
+            precoProduto = preco;
+            document.getElementById('modalTitle').textContent = produto;
+            document.getElementById('modalImage').src = imagem;
+            document.getElementById('modalPrice').textContent = `R$ ${preco.toFixed(2)}`;
+            document.getElementById('quantidade').value = 1;
+            atualizarPrecoModal();
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        function fecharModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+        function atualizarPrecoModal() {
+            const quantidade = document.getElementById('quantidade').value;
+            document.getElementById('modalPrice').textContent = `R$ ${(precoProduto * quantidade).toFixed(2)}`;
+        }
+
+        function adicionarAoCarrinho() {
+            const listaCarrinho = document.getElementById('listaCarrinho');
+            const quantidade = parseInt(document.getElementById('quantidade').value);
+            const li = document.createElement('li');
+            li.textContent = `${produtoSelecionado} - R$ ${(precoProduto * quantidade).toFixed(2)}`;
+
+            const quantidadeInput = document.createElement('input');
+            quantidadeInput.type = 'number';
+            quantidadeInput.min = '1';
+            quantidadeInput.value = quantidade;
+            quantidadeInput.onchange = () => atualizarQuantidade(li, quantidadeInput);
+
+            const removerBtn = document.createElement('button');
+            removerBtn.textContent = 'Remover';
+            removerBtn.onclick = () => removerDoCarrinho(li);
+
+            li.appendChild(quantidadeInput);
+            li.appendChild(removerBtn);
+            listaCarrinho.appendChild(li);
+
+            atualizarTotal();
+            fecharModal();
+            document.getElementById('carrinhoOverlay').style.display = 'flex';
+        }
+
+        function atualizarQuantidade(item, input) {
+            const novaQuantidade = parseInt(input.value);
+            const precoUnitario = precoProduto;
+            item.firstChild.textContent = `${produtoSelecionado} - R$ ${(precoUnitario * novaQuantidade).toFixed(2)}`;
+            atualizarTotal();
+        }
+
+        function removerDoCarrinho(item) {
+            item.remove();
+            atualizarTotal();
+        }
+
+        function atualizarTotal() {
+            const listaCarrinho = document.getElementById('listaCarrinho');
+            let total = 0;
+            listaCarrinho.querySelectorAll('li').forEach(item => {
+                const quantidade = parseInt(item.querySelector('input').value);
+                const preco = precoProduto;
+                total += quantidade * preco;
+            });
+            document.getElementById('total').textContent = `R$ ${total.toFixed(2)}`;
+        }
+
+        function fecharCarrinho() {
+            document.getElementById('carrinhoOverlay').style.display = 'none';
+        }
+
+        document.getElementById('carrinhoOverlay').addEventListener('click', function(event) {
+            if (event.target === this) {
+                fecharCarrinho();
+            }
+        });
+    </script>
+
+</body>
+</html>
