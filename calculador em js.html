@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container{
+            background-color: rgb(41, 40, 40);
+            display: flex;
+            flex-direction: column;
+            width: 33%;
+            height: 90vh;
+        }
+        .content{
+           display: grid;
+           grid-template-columns: repeat(4, 1fr);
+           max-width: 75%;
+           margin: 0 auto;
+           grid-gap: 10px;
+        }
+        .btn{
+            border: none;
+            background-color: rgb(99, 99, 99);
+            border-radius: 100%;
+            height: 60px;
+            width: 60px;
+            transition: 0.5s;
+        }
+        .btn:hover{
+            transform: scale(1.1);
+            background-color: rgb(178, 177, 177);
+        }
+        .visor{
+            display: flex;
+            border: none;
+            background-color: gray;
+            height: 15%;
+            width: 80%;
+            align-self: center;
+            margin-top: 3%;
+            font-size: 50px;
+            justify-content: flex-end;
+            align-items: cen;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p class="visor" id="result"></p>
+        <div class="content">
+            <button class="btn" onclick="equal()">=</button>
+            <button class="btn" onclick="apagar()">C</button>
+            <button class="btn" onclick="remove()">remove</button>
+            <button class="btn" onclick="escrever('7')">7</button>
+            <button class="btn" onclick="escrever('1')">1</button>
+            <button class="btn" onclick="escrever('/')">/</button>
+            <button class="btn" onclick="escrever('**')">^</button>
+            <button class="btn" onclick="escrever('*')">*</button>
+            <button class="btn" onclick="escrever('-')">-</button>
+            <button class="btn" onclick="escrever('+')">+</button>
+            <button class="btn" onclick="escrever('2')">2</button>
+            <button class="btn" onclick="escrever('3')">3</button>
+            <button class="btn" onclick="escrever('4')">4</button>
+            <button class="btn" onclick="escrever('5')">5</button>
+            <button class="btn" onclick="escrever('6')">6</button>
+            <button class="btn" onclick="escrever('8')">8</button>
+            <button class="btn" onclick="escrever('9')">9</button>
+            <button class="btn" onclick="escrever('0')">0</button>
+        </div>
+    </div>
+</body>
+<script>
+   const p = document.getElementById("result")
+  function escrever(valorbtn){
+    p.innerText += valorbtn
+  }
+  function apagar(){
+    p.innerText = ""
+  }
+  function equal(){
+    p.innerText = eval(p.innerText)
+  }
+  function remove(){
+    p.innerText = p.innerText.slice(0,-1)
+  }
+</script>
+</html>
